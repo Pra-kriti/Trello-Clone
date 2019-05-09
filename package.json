@@ -5,6 +5,7 @@
   "dependencies": {
     "antd": "^3.16.5",
     "react": "^16.8.6",
+    "react-beautiful-dnd": "^11.0.2",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.0",
     "react-simple-storage": "^1.4.1"
