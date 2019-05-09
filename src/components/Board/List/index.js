@@ -290,21 +290,22 @@ class List extends Component {
                                                                 <Droppable
                                                                     droppableId={listId}
                                                                     type='task'
+                                                                    key={listId}
+                                                                    isDropDisabled={false}
                                                                 >
                                                                     {(provided) => (
-                                                                        <div
-                                                                            ref={provided.innerRef}
-                                                                            {...provided.droppableProps}
+                                                                        <div                                                                            
+                                                                            ref={provided.innerRef} 
+                                                                            {...provided.droppableProps}                                                                
                                                                         >
-                                                                            {provided.placeholder}
-                                                                            {list.taskId.map((id, index) => (
+                                                                            {list.taskId.map((id, index) => (                                            
                                                                                 <Draggable
-                                                                                    key={id}
                                                                                     draggableId={id}
                                                                                     index={index}
                                                                                 >
                                                                                     {(provided) => (
-                                                                                        <div                                                                                            
+                                                                                        <div    
+                                                                                            className='card-min-height'                                                                                        
                                                                                             {...provided.draggableProps}
                                                                                             {...provided.dragHandleProps}
                                                                                             ref={provided.innerRef}
@@ -313,16 +314,16 @@ class List extends Component {
                                                                                             {this.state.card[id].body
                                                                                             ? 
                                                                                             <div className='list-card'>
-                                                                                                <p className='card-title'>{this.state.card[id].body}</p>
-                                                                                            </div>  
+                                                                                                <p className='card-title'>{this.state.card[id].body}</p>                                                                                                
+                                                                                            </div>                                                                                              
                                                                                             : 
-                                                                                            null}                                                          
-                                                                                        </div>
-                                                                                    )
-                                                                                }                                                                                
-                                                                                </Draggable>                                                                                
+                                                                                            null
+                                                                                            }                                                        
+                                                                                        </div>                                                                                        
+                                                                                    )}                                                                                                                                                                
+                                                                                </Draggable>                                                                               
                                                                             ))}
-
+                                                                            {provided.placeholder}
                                                                         </div>
                                                                     )}
                                                                     
