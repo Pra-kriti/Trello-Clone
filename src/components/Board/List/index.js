@@ -97,23 +97,14 @@ class List extends Component {
         })
     }
 
-    deleteCard = (listId) => {
-        return new Promise((resolve, reject) => {
-            const { card, list } = this.state;
-            for (var key in card) {
-                if (list[listId].taskId.includes(card[key].id)){
-                    resolve(true);
-                    delete card[key]
-                }
-            }
-        })
-        
-    }
-
-    async handleDeleteList (listId, e) {
+    handleDeleteList (listId, e) {
         e.preventDefault();
-        const { list, listOrder } = this.state;
-        await this.deleteCard(listId);  
+        const { card, list, listOrder } = this.state;
+        for (var key in card) {
+            if (list[listId].taskId.includes(card[key].id)){
+                delete card[key]
+            }
+        }  
         delete list[listId];
         const index = listOrder.findIndex(lo => lo === listId);   
         listOrder.splice(index, 1);
@@ -244,6 +235,20 @@ class List extends Component {
         this.setState(newState);
     }
 
+    showModal = () => {
+        alert('Clicked')
+    }
+
+    // getCardStyle = (isDragging, draggableStyle) => ({
+    //     border: isDragging ? 'lightgreen' : 'grey',
+    //     ...draggableStyle
+    // })
+
+    // getListStyle = (isDraggingOver) => ({
+    //     marginBottom: isDraggingOver ? '1em': null,
+    //     background: isDraggingOver ? 'lightgrey' : null
+    // })
+
     render() {
         const {inputListTitle, listOrder, list } = this.state;
         return(
@@ -274,7 +279,7 @@ class List extends Component {
                                                 <div
                                                     {...provided.draggableProps}
                                                     ref={provided.innerRef}                                                    
-                                                    {...provided.dragHandleProps}
+                                                    {...provided.dragHandleProps}                       
                                                 >
                                                     <div className='lists-flex-row'>
                                                         {list.title
@@ -290,36 +295,38 @@ class List extends Component {
                                                                 <Droppable
                                                                     droppableId={listId}
                                                                     type='task'
-                                                                    key={listId}
-                                                                    isDropDisabled={false}
+                                                                    key={listId}                                                          
                                                                 >
-                                                                    {(provided) => (
+                                                                    {(provided, snapshot) => (
                                                                         <div                                                                            
                                                                             ref={provided.innerRef} 
-                                                                            {...provided.droppableProps}                                                                
+                                                                            {...provided.droppableProps} 
+                                                                            className='card-min-height'   
+                                                                            // style={this.getListStyle(snapshot.isDraggingOver)}                                                         
                                                                         >
                                                                             {list.taskId.map((id, index) => (                                            
                                                                                 <Draggable
                                                                                     draggableId={id}
                                                                                     index={index}
                                                                                 >
-                                                                                    {(provided) => (
-                                                                                        <div    
-                                                                                            className='card-min-height'                                                                                        
+                                                                                    {(provided, snapshot) => (
+                                                                                        <div                                                                                           
                                                                                             {...provided.draggableProps}
-                                                                                            {...provided.dragHandleProps}
                                                                                             ref={provided.innerRef}
+                                                                                            {...provided.dragHandleProps} 
+                                                                                            // style={this.getCardStyle(snapshot.isDragging, provided.draggableProps.style)}                                                                                       
                                                                                         >
                                                                                             {provided.placeholder}
                                                                                             {this.state.card[id].body
                                                                                             ? 
-                                                                                            <div className='list-card'>
+                                                                                            <div className='list-card' onClick={this.showModal}>
                                                                                                 <p className='card-title'>{this.state.card[id].body}</p>                                                                                                
                                                                                             </div>                                                                                              
                                                                                             : 
                                                                                             null
-                                                                                            }                                                        
-                                                                                        </div>                                                                                        
+                                                                                            }                                                                                                                                                   
+                                                                                        </div>  
+                                                                                                                                                                              
                                                                                     )}                                                                                                                                                                
                                                                                 </Draggable>                                                                               
                                                                             ))}
@@ -332,10 +339,10 @@ class List extends Component {
                                                                 {this.state.list[listId].inputCardTitle 
                                                                 ?
                                                                 <div className='add-card'>
-                                                                    <Form className='list-form'>
+                                                                    <Form className='list-form' onSubmit={(e) => this.handleCardTitleSubmit(listId, e)} >
                                                                         <Icon id='cross-icon' type='cross' style={{color: 'red'}} onClick={(e) => this.handleDeleteCard(listId, this.state.list[listId].taskId[this.state.list[listId].taskId.length-1], e)} />
                                                                         <Input name='list-title' id='list-title-input' size='large' placeholder='Enter title of the card' onChange={(e) => this.handleCardTitleChange(this.state.list[listId].taskId[this.state.list[listId].taskId.length-1], e)} />                        
-                                                                        <Button id='list-title-submit' type='primary' onClick={(e) => this.handleCardTitleSubmit(listId, e)} >Submit</Button>    
+                                                                        <Button id='list-title-submit' type='primary' onClick={(e) => this.handleCardTitleSubmit(listId, e)}>Submit</Button>    
                                                                     </Form>
                                                                 </div>
                                                                 :
@@ -373,10 +380,10 @@ class List extends Component {
                                     {inputListTitle 
                                     ?
                                     <div className='add-list'>
-                                        <Form className='list-form' onSubmit={this.handleSubmit}>
+                                        <Form className='list-form' onSubmit={this.handleTitleSubmit} >
                                             <Icon id='cross-icon' type='cross' style={{color: 'red'}} onClick={this.handleDelete} />
                                             <Input name='list-title' id='list-title-input' size='large' placeholder='Enter title of the list' onChange={(e) => this.handleInputTitleChange(listOrder[listOrder.length-1], e)} />                        
-                                            <Button id='list-title-submit' type='primary' onClick={this.handleTitleSubmit} >Submit</Button>    
+                                            <Button id='list-title-submit' type='primary' onClick={this.handleTitleSubmit}>Submit</Button>    
                                         </Form>
                                     </div>
                                     :

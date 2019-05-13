@@ -168,8 +168,8 @@ code {
   display: flex;
   flex-direction: column;
   margin-top: 10px;
-  /* min-height: 10px;
-  flex-grow: 1; */
+  /* min-height: 10px; */
+  /* flex-grow: 1; */
 }
 
 .list-card:hover {
@@ -177,11 +177,12 @@ code {
 }
 
 .card-min-height {
-  min-height: 10px;
+  min-height: 5px;
 }
 
 .card-title {
   align-self: flex-start;
+  display: block;
 }
 
 .add-card-btn {
